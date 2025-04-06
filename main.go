@@ -2,6 +2,7 @@ package main
 
 import (
 	"html/template"
+	"io"
 	"net/http"
 )
 
@@ -23,6 +24,18 @@ func artistsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	tmpl.Execute(w, nil)
+
+}
+func apiHandler(w http.ResponseWriter, r *http.Request) {
+	resp, err := http.Get("https://groupietrackers.herokuapp.com/api/artists")
+	if err != nil {
+		http.Error(w, "Failed to fetch artists", http.StatusInternalServerError)
+		return
+	}
+	defer resp.Body.Close()
+
+	w.Header().Set("Content-Type", "application/json")
+	io.Copy(w, resp.Body)
 }
 func main() {
 	fs := http.FileServer(http.Dir("static"))
@@ -30,6 +43,7 @@ func main() {
 
 	http.HandleFunc("/", homepageHandler)
 	http.HandleFunc("/artists", artistsHandler)
+	http.HandleFunc("/api/artists", apiHandler)
 
 	println("Server started at http://localhost:8080")
 	http.ListenAndServe(":8080", nil)
