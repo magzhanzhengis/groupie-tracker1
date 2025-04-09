@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>My Go Webpage</title>
-  <link rel="stylesheet" href="/static/styles.css">
-  <script defer src = "/static/script.js"></script>
+  <!-- <link rel="stylesheet" href="/static/styles.css"> -->
 </head>
 <body>
 
@@ -12,8 +11,28 @@
     <h1>Artists</h1>
   </header>
   <p><a href="/homepage">Go to homepage Page</a></p>
-  <div id="artist-list"></div>
+  <div class="container">
+    <!-- Artist Info Section -->
+    <h1>{{.Name}}</h1> <!-- Display artist name -->
+    
+    <div class="artist-info">
+      {{range .}} <!-- Iterating through artists -->
+    <div class="artist-card">
+        <h2>{{.Name}}</h2>  <!-- Display artist name -->
+        <img src="{{.Image}}" alt="{{.Name}}">  <!-- Display artist image -->
+        <p><strong>Artist ID:</strong> {{.ID}}</p>  <!-- Display artist ID -->
+        <p><strong>Members:</strong></p>
+        <ul class="members-list">
+            {{range .Members}}  <!-- Iterate through each member -->
+                <li>{{.}}</li>  <!-- Display member -->
+            {{end}}
+        </ul>
+    </div>
+{{end}}
 
+    </div>
+
+</div>
   <!-- <footer>
     <p>© 2025 My Website</p>
   </footer> -->
