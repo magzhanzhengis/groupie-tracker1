@@ -9,10 +9,42 @@ import (
 
 // Joke struct to hold the joke data
 type Artist struct {
-	ID      int      `json:"id"`
-	Name    string   `json:"name"`
-	Image   string   `json:"image"`
-	Members []string `json:"members"`
+	ID           int      `json:"id"`
+	Name         string   `json:"name"`
+	Image        string   `json:"image"`
+	Members      []string `json:"members"`
+	Creationdate int      `json:"creationDate"`
+	Firstalbum   string   `json:"firstAlbum"`
+	Locations    string   `json:"locations"`
+	Concertdates string   `json:"concertDates"`
+	Relations    string   `json:"relations"`
+}
+
+func artistDetailHandler(w http.ResponseWriter, r *http.Request) {
+	idStr := r.URL.Path[len("/artist/"):]
+	artists, err := getArtistDetails()
+	if err != nil {
+		http.Error(w, "Failed to fetch artists", http.StatusInternalServerError)
+		return
+	}
+	var selected Artist
+	for _, artist := range artists {
+		if fmt.Sprintf("%d", artist.ID) == idStr {
+			selected = artist
+			break
+		}
+
+	}
+	if selected.ID == 0 {
+		http.NotFound(w, r)
+		return
+	}
+	tmpl, err := template.ParseFiles("templates/artist_detail.html")
+	if err != nil {
+		http.Error(w, "Failed to load template", http.StatusInternalServerError)
+		return
+	}
+	tmpl.Execute(w, selected)
 }
 
 // Fetch random joke from API
@@ -63,6 +95,7 @@ func main() {
 	// Route to handle the homepage
 	http.HandleFunc("/", homepageHandler)
 	http.HandleFunc("/artists", artistsHandler)
+	http.HandleFunc("/artist/", artistDetailHandler)
 
 	// Start server
 	fmt.Println("Server running at http://localhost:8080")

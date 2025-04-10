@@ -12,27 +12,26 @@
   </header>
   <p><a href="/homepage">Go to homepage Page</a></p>
   <div class="container">
-    <!-- Artist Info Section -->
-    <h1>{{.Name}}</h1> <!-- Display artist name -->
-    
-    <div class="artist-info">
-      {{range .}} <!-- Iterating through artists -->
+  <!-- Artist Info Section -->
+  <div class="artist-info">
+    {{range .}} <!-- Iterating through artists -->
+    <a href="/artist/{{.ID}}">
     <div class="artist-card">
-        <h2>{{.Name}}</h2>  <!-- Display artist name -->
-        <img src="{{.Image}}" alt="{{.Name}}">  <!-- Display artist image -->
-        <p><strong>Artist ID:</strong> {{.ID}}</p>  <!-- Display artist ID -->
-        <p><strong>Members:</strong></p>
+        <img src="{{.Image}}" alt="{{.Name}}">
+        <h2>{{.Name}}</h2>
+        <!-- <p><strong>Artist ID:</strong> {{.ID}}</p> -->
+        <!-- <p><strong>Members:</strong></p>
         <ul class="members-list">
-            {{range .Members}}  <!-- Iterate through each member -->
-                <li>{{.}}</li>  <!-- Display member -->
+            {{range .Members}}
+                <li>{{.}}</li>
             {{end}}
-        </ul>
+        </ul> -->
     </div>
-{{end}}
-
-    </div>
-
+    </a>
+    {{end}}
+  </div>
 </div>
+
   <!-- <footer>
     <p>© 2025 My Website</p>
   </footer> -->
