@@ -15,22 +15,39 @@ type Artist struct {
 	Members      []string `json:"members"`
 	Creationdate int      `json:"creationDate"`
 	Firstalbum   string   `json:"firstAlbum"`
-	Locations    string   `json:"locations"`
-	Concertdates string   `json:"concertDates"`
-	Relations    string   `json:"relations"`
+	// Locations    string   `json:"locations"`
+	// Concertdates string   `json:"concertDates"`
+	// Relations    string   `json:"relations"`
+}
+type Relation struct {
+    Index []RelationEntry `json:"index"`
+}
+
+type RelationEntry struct {
+    ID             int                  `json:"id"`
+    DatesLocations map[string][]string `json:"datesLocations"`
 }
 
 func artistDetailHandler(w http.ResponseWriter, r *http.Request) {
 	idStr := r.URL.Path[len("/artist/"):]
 	artists, err := getArtistDetails()
-	if err != nil {
+	datesLocations, err1 := getArtistRelations()
+	if (err != nil) || (err1 != nil) {
 		http.Error(w, "Failed to fetch artists", http.StatusInternalServerError)
 		return
 	}
 	var selected Artist
+	var selected1 Relation
 	for _, artist := range artists {
 		if fmt.Sprintf("%d", artist.ID) == idStr {
 			selected = artist
+			break
+		}
+
+	}
+	for _, artistdateLocation := range datesLocations.Index {
+		if fmt.Sprintf("%d", artistdateLocation.ID) == idStr {
+			selected1 = artistdateLocation
 			break
 		}
 
@@ -44,7 +61,7 @@ func artistDetailHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to load template", http.StatusInternalServerError)
 		return
 	}
-	tmpl.Execute(w, selected)
+	tmpl.Execute(w, selected, selected1)
 }
 
 // Fetch random joke from API
@@ -60,9 +77,22 @@ func getArtistDetails() ([]Artist, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return artists, nil
 }
-
+func getArtistRelations() (Relation, error) {
+	rel, err := http.Get("https://groupietrackers.herokuapp.com/api/relation")
+	if err != nil {
+		return Relation{}, err
+	}
+	defer rel.Body.Close()
+	var relations Relation
+	err = json.NewDecoder(rel.Body).Decode(&relations)
+	if err != nil {
+		return Relation{}, err
+	}
+	return relations, nil
+}
 // Home handler to serve the page åand display the joke
 func homepageHandler(w http.ResponseWriter, r *http.Request) {
 
