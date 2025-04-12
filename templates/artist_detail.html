@@ -1,23 +1,24 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>{{.Name}} </Details></title>
-    </head>
     <body>
-        <h1>{{.Name}}</h1>
-        <img src="{{.Image}}" alt="{{.Name}}">
+        <h1>{{.Artist.Name}}</h1>
+        <img src="{{.Artist.Image}}" alt="{{.Artist.Name}}">
         <!-- <p><strong>Artist ID:</strong> {{.ID}}</p> -->
         <p><strong>Members:</strong></p>
         <ul>
-            {{range .Members}}
+            {{range .Artist.Members}}
             <li>{{.}}</li>
             {{end}}
         </ul>
-        <p><strong>Creation Date: {{.Creationdate}}</strong></p>
-        <p><strong>First Album: {{.Firstalbum}}</strong></p>
-        <p><strong>Locations: {{.Locations}}</strong></p>
-        <p><strong>Concert Dates: {{.Concertdates}}</strong></p>
-        <p><strong>Relations: {{.Relations}}</strong></p>
+        <h2>Concert Locations and Dates</h2>
+        {{range $city, $dates := .Relation.DatesLocations}}
+        <p>{{$city}}</p>
+        <ul>
+            {{range $dates}}
+            <li>{{.}}</li>
+            {{end}}
+        </ul>
+        {{end}}
         <p><a href="/artists"> Back to Artists </a></p>
     </body>
 </html>

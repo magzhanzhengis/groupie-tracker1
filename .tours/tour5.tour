@@ -1,0 +1,12 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "tour5",
+  "steps": [
+    {
+      "file": "main.go",
+      "description": "Great follow-up! You're asking:\n\n> What’s the difference between defining this struct:\n```go\ntype ArtistDetailPage struct {\n    Artist   Artist\n    Relation RelationEntry\n}\n```\n\nand then using this:\n```go\ndata := ArtistDetailPage{\n    Artist: selected,\n    Relation: selected1,\n}\ntmpl.Execute(w, data)\n```\n\nThe answer is:  \n✅ **These are two different steps that work together**, but they are not the same thing.\n\nLet’s explain both **in simple terms**:\n\n---\n\n## 1. `type ArtistDetailPage struct { ... }`\n\n### ✅ What this does:\nThis is a **type definition**.\n\nYou're telling Go:\n> \"I want to define a new custom type called `ArtistDetailPage`, and it should contain two fields: `Artist` and `Relation`.\"\n\nSo now `ArtistDetailPage` becomes a **blueprint** — like a recipe or a form.\n\n🧠 Think of it like declaring:\n> \"I want a form that collects both an artist and their relation info.\"\n\nYou only write this **once**, usually at the top of your Go file.\n\n---\n\n## 2. `data := ArtistDetailPage{...}`\n\n### ✅ What this does:\nThis is **creating an actual value** (a variable) using the struct you defined.\n\nYou're saying:\n> \"Let me create one `ArtistDetailPage` object and fill its fields using `selected` and `selected1`.\"\n\nThis is the actual **object** you will pass to your HTML template:\n```go\ntmpl.Execute(w, data)\n```\n\n---\n\n## 🔁 Analogy\n\n| Step | Analogy                          |\n|------|----------------------------------|\n| `type ArtistDetailPage ...` | You design a form (the layout) |\n| `data := ArtistDetailPage{...}` | You fill out that form with real info |\n\n---\n\n## 💡 Why You Need Both\n\nYou **must** define the type before you can create a variable of that type.\n\nIt’s like:\n```go\ntype Person struct {\n    Name string\n}\n```\n\nAnd then later:\n```go\np := Person{Name: \"Alice\"}\n```\n\n---\n\n## ✅ Summary\n\n| Code Part | What It Does |\n|-----------|---------------|\n| `type ArtistDetailPage struct { ... }` | Defines a new struct type |\n| `data := ArtistDetailPage{...}` | Creates a real variable (instance) of that struct |\n| `tmpl.Execute(w, data)` | Sends that combined data to your HTML template |\n\n---\n\nLet me know if you'd like help passing more fields (like albums or tour links) into the same template!",
+      "line": 67
+    }
+  ],
+  "ref": "main"
+}
